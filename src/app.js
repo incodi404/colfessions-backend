@@ -6,7 +6,7 @@ import cookieSession from "cookie-session"
 import cookieParser from "cookie-parser"
 
 passport.use(new Strategy({
-    callbackURL: "/auth/google/callback",
+    callbackURL: "https://colfessions-backend.vercel.app/auth/google/callback",
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
 }, (accessToken, refreshToken, profile, done)=>{
