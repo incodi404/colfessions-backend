@@ -4,6 +4,7 @@ import passport from "passport"
 import { Strategy } from "passport-google-oauth20"
 import cookieSession from "cookie-session"
 import cookieParser from "cookie-parser"
+import session from "express-session"
 
 passport.use(new Strategy({
     callbackURL: "https://colfessions-backend.vercel.app/auth/google/callback",
@@ -30,15 +31,19 @@ app.use(cors({
     origin: process.env.CORS_ORIGIN,
     credentials: true
 }))
-app.use(cookieSession({
-    name: 'colsession',
-    keys: [process.env.SESSION_KEY_ONE, process.env.SESSION_KEY_TWO],
-    httpOnly: true,
-    secure:true,
-    sameSite: "none",
-    maxAge: 24*60*60*1000
-}))
+app.use()
 app.use(cookieParser())
+app.use(session({
+    secret: "potla",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: true,
+        sameSite: "none",
+        httpOnly:true,
+        maxAge: 24*60*60*1000
+    }
+}))
 app.use(passport.initialize())
 app.use(passport.session())
 
