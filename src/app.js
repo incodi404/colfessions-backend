@@ -3,7 +3,6 @@ import cors from "cors"
 import passport from "passport"
 import { Strategy } from "passport-google-oauth20"
 import cookieSession from "cookie-session"
-import helmet from "helmet"
 
 passport.use(new Strategy({
     callbackURL: "https://colfessions-backend.vercel.app/auth/google/callback",
@@ -30,7 +29,6 @@ app.use(cors({
     origin: process.env.CORS_ORIGIN,
     credentials: true
 }))
-app.use(helmet())
 app.use(cookieSession({
     name: 'colsession',
     keys: [process.env.SESSION_KEY_ONE, process.env.SESSION_KEY_TWO],
