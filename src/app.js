@@ -35,8 +35,7 @@ app.use(cookieSession({
     name: 'colsession',
     keys: [process.env.SESSION_KEY_ONE, process.env.SESSION_KEY_TWO],
     httpOnly: true,
-    secure: true,
-    sameSite: "none",
+    secure: false,
     maxAge: 24*60*60*1000
 }))
 app.use(passport.initialize())
