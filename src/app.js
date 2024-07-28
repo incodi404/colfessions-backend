@@ -37,7 +37,6 @@ app.use(session({
     saveUninitialized: true,
     secret: 'SECRET'
 }))
-app.use(passport)
 app.use(passport.initialize())
 app.use(passport.session())
 
