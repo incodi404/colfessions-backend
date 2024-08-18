@@ -1,8 +1,7 @@
 import { connectDb } from "./db/index.db.js"
-import { app, options } from "./app.js"
+import { app } from "./app.js"
 import dotenv from "dotenv"
 import { client } from "./db/redis.db.js"
-import https from "https"
 
 dotenv.config({
     path: "./.env"
@@ -18,8 +17,8 @@ try {
 try {
     connectDb()
         .then(() => {
-            https.createServer(options, app).listen(process.env.PORT, () => {
-                console.log("Listening on port ::", process.env.PORT);
+            app.listen(process.env.PORT, () => {
+                console.log("Server is listening at ::", process.env.PORT);
             })
         })
 } catch (error) {
