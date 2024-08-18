@@ -3,60 +3,51 @@ import cors from "cors"
 import passport from "passport"
 import { Strategy } from "passport-google-oauth20"
 import cookieSession from "cookie-session"
-import fs from "fs"
-import path from "path"
-import { fileURLToPath } from "url"
+import cookieParser from "cookie-parser"
 
 passport.use(new Strategy({
     callbackURL: "https://colfessions-backend.vercel.app/auth/google/callback",
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-}, (accessToken, refreshToken, profile, done) => {
+}, (accessToken, refreshToken, profile, done)=>{
     //console.log(profile)
     return done(null, profile)
 }))
 
-passport.serializeUser((user, done) => {
+passport.serializeUser((user, done)=>{
     done(null, user.id)
 })
 
-passport.deserializeUser((user, done) => {
+passport.deserializeUser((user, done)=>{
     done(null, user)
 })
 
 const app = express()
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const options = {
-    key: fs.readFileSync(path.join(__dirname, '../ssl', 'server.key')),
-    cert: fs.readFileSync(path.join(__dirname, '../ssl', 'server.cert')),
-};
-
-app.use(express.json({ limit: "50kb" }))
-app.use(express.urlencoded({ limit: "50kb", extended: true }))
+app.use(express.json({limit: "50kb"}))
+app.use(express.urlencoded({limit: "50kb", extended: true}))
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
     credentials: true
 }))
+app.use(cookieParser())
 app.use(cookieSession({
     name: 'colsession',
     keys: [process.env.SESSION_KEY_ONE, process.env.SESSION_KEY_TWO],
     httpOnly: true,
     secure: true,
     sameSite: "none",
-    maxAge: 24 * 60 * 60 * 1000
+    maxAge: 24*60*60*1000
 }))
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.get("/failed", (req, res) => {
-    res.status(404).json({ status: "failed" })
+app.get("/failed", (req,res)=>{
+    res.status(404).json({status: "failed"})
 })
-app.get("/success", (req, res) => {
+app.get("/success", (req,res)=>{
     console.log(req.user);
-    res.status(200).json({ status: "success" })
+    res.status(200).json({status: "success"})
 })
 
 //import routers
@@ -75,4 +66,4 @@ app.use("/api/v1/get", getRouter)
 //auth routes
 app.use("/auth", authRouter)
 
-export { app,options }
+export {app}
